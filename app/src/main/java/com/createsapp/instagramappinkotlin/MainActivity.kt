@@ -11,9 +11,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
 
-    internal var selectedFragment: Fragment? = null
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -21,9 +18,11 @@ class MainActivity : AppCompatActivity() {
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
         navView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
 
-        supportFragmentManager.beginTransaction().replace(
-            R.id.fragment_container, HomeFragment()
-        ).commit()
+        moveToFragment(HomeFragment())
+
+//        supportFragmentManager.beginTransaction().replace(
+//            R.id.fragment_container, HomeFragment()
+//        ).commit()
     }
 
     private val onNavigationItemSelectedListener =
@@ -32,12 +31,13 @@ class MainActivity : AppCompatActivity() {
             when (it.itemId) {
 
                 R.id.nav_home -> {
-                    selectedFragment = HomeFragment()
+                    moveToFragment(HomeFragment())
+                    return@OnNavigationItemSelectedListener true
                 }
 
                 R.id.nav_search -> {
-                    selectedFragment = SearchFragment()
-
+                    moveToFragment(SearchFragment())
+                    return@OnNavigationItemSelectedListener true
                 }
 
                 R.id.nav_add -> {
@@ -45,21 +45,29 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 R.id.nav_heart -> {
-                    selectedFragment = NotificationFragment()
+                    moveToFragment(NotificationFragment())
+                    return@OnNavigationItemSelectedListener true
                 }
 
                 R.id.nav_profile -> {
-                    selectedFragment = ProfileFragment()
+                    moveToFragment(ProfileFragment())
+                    return@OnNavigationItemSelectedListener true
                 }
 
             }
 
-            if (selectedFragment != null) {
-                supportFragmentManager.beginTransaction().replace(
-                    R.id.fragment_container, selectedFragment!!
-                ).commit()
-            }
+//            if (selectedFragment != null) {
+//                supportFragmentManager.beginTransaction().replace(
+//                    R.id.fragment_container, selectedFragment!!
+//                ).commit()
+//            }
 
             false
         }
+
+    private fun moveToFragment(fragment: Fragment) {
+        val fragmentTrans = supportFragmentManager.beginTransaction()
+        fragmentTrans.replace(R.id.fragment_container, fragment)
+        fragmentTrans.commit()
+    }
 }
